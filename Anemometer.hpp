@@ -1,7 +1,7 @@
+#pragma once
 #include "esp32-hal-gpio.h"
 #include "FunctionalInterrupt.h"
 #include "esp32-hal.h"
-#pragma once
 
 #include <Arduino.h>
 #include <Wire.h>
@@ -13,7 +13,6 @@
 
 static volatile unsigned long g_lastRiseTimeMicroSec = 0;
 static volatile double g_latestPeriodMiliSec = 0.0;
-static volatile bool g_hasPulse = false;
 
 // 立ち上がりの周期を保存
 void IRAM_ATTR ISR_AnemometerPulse() {
@@ -21,7 +20,6 @@ void IRAM_ATTR ISR_AnemometerPulse() {
   const unsigned long diff = CalcDiffWithOverflow(static_cast<unsigned long>(g_lastRiseTimeMicroSec), currentMicroSec);
   g_latestPeriodMiliSec = static_cast<double>(diff) / 1000.0;
   g_lastRiseTimeMicroSec = currentMicroSec;
-  g_hasPulse = true;
 }
 
 
@@ -54,7 +52,6 @@ void Anemometer::Setup() {
   PowerOn();
   m_windSpeed = 0.0;
   g_latestPeriodMiliSec = 0.0;
-  g_hasPulse = false;
   g_lastRiseTimeMicroSec = micros();
   m_preBootTimeMiliSec = millis();
   // GPIO_BLUE_WIREの立ち上がり時にISR_AnemometerPulseを実行
