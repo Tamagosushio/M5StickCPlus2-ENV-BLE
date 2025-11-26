@@ -2,6 +2,7 @@
 
 #include <limits>
 #include <cstdint>
+#include <cstddef>
 
 // 使用するPINの番号
 constexpr int GPIO_GREEN_WIRE = 0;
@@ -15,6 +16,8 @@ constexpr unsigned long UNSIGNED_LONG_LIMIT = std::numeric_limits<unsigned long>
 constexpr double PERIOD_TIMEOUT_MS = 1000.0;
 // 周期がタイムアウトしたときの風速
 constexpr double WIND_SPEED_TIMEOUT = 0.0;
+// 風速値の最大値
+constexpr double WIND_SPEED_MAX = 30.0;
 // 風速計を再起動する間隔
 constexpr double PERIOD_REBOOT_ANEMOMETER_MS = 1000.0 * 60 * 10; // 10分
 // アドバタイジングパケットを送信する秒数
@@ -33,11 +36,11 @@ struct Measurements {
 /// @brief オーバーフローを考慮した2値の差を求める
 /// @param start 2値のうち小さいとされる値
 /// @param end 2値のうち大きいとされる値
-template<class T>
+template<typename T>
 T CalcDiffWithOverflow(const T& start, const T& end) {
+  // オーバーフローしている場合
   if (start > end) {
-    const T maxValue = std::numeric_limits<T>::max();
-    return end + (maxValue - start);
+    return (std::numeric_limits<T>::max() - start) + end + 1;
   }
   return end - start;
 }

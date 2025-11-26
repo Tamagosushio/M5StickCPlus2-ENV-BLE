@@ -5,6 +5,7 @@
 #include <BLEDevice.h> // Bluetooth Low Energy
 #include <BLEServer.h> // Bluetooth Low Energy
 #include <BLEUtils.h>  // Bluetooth Low Energy
+#include <algorithm>
 
 class BLE {
 public:
@@ -52,8 +53,9 @@ void BLE::SetAdvData(BLEAdvertising *pAdvertising, const Measurements& measureme
   strServiceData += static_cast<char>(0xff); // Test manufacture ID low byte
   strServiceData += static_cast<char>(0xff); // Test manufacture ID high byte
   strServiceData += static_cast<char>(m_seq++); // シーケンス番号
-  // 風速
-  const uint16_t windSpeedInt = static_cast<uint16_t>(measurements.windSpeed * 100.0);
+  // 風速(int16_tの範囲内に収める)
+  double windSpeed = std::clamp(measurements.windSpeed, 0.0, WIND_SPEED_MAX);
+  const uint16_t windSpeedInt = static_cast<uint16_t>(windSpeed * 100.0);
   strServiceData += static_cast<char>(windSpeedInt & 0xff);
   strServiceData += static_cast<char>((windSpeedInt >> 8) & 0xff);
   // CO2濃度
