@@ -71,10 +71,14 @@ void DTeam::SetupDisplay() {
 // 風速、CO2濃度、温度、湿度の4測定値をディスプレイに表示
 void DTeam::DisplayMeasurements(void) {
   M5.Lcd.setCursor(0, 0, 1);
-  M5.Lcd.printf("windSpeed:%2.2f[m/s]\r\n", m_measurements.windSpeed);
-  M5.Lcd.printf("CO2:%4d[ppm]\r\n", m_measurements.co2);
-  M5.Lcd.printf("Temperature:%2.2f[C]\r\n", m_measurements.temperature);
-  M5.Lcd.printf("Humidity:%2.2f[%%]\r\n", m_measurements.humidity);
+  M5.Lcd.printf("windSpeed:\r\n");
+  M5.Lcd.printf("    %2.2f[m/s]\r\n", m_measurements.windSpeed);
+  M5.Lcd.printf("CO2:\r\n");
+  M5.Lcd.printf("    %4d[ppm]\r\n", m_measurements.co2);
+  M5.Lcd.printf("Temperature:\r\n");
+  M5.Lcd.printf("    %2.2f[C]\r\n", m_measurements.temperature);
+  M5.Lcd.printf("Humidity:\r\n");
+  M5.Lcd.printf("    %2.2f[%%]\r\n", m_measurements.humidity);
 }
 
 
