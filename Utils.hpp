@@ -16,7 +16,7 @@ constexpr double PERIOD_TIMEOUT_MS = 1000.0;
 // 周期がタイムアウトしたときの風速
 constexpr double WIND_SPEED_TIMEOUT = 0.0;
 // 風速計を再起動する間隔
-constexpr double PERIOD_REBOOT_ANEMOMETER_MS = 1000.0 * 60 * 1.5; // 1.5分
+constexpr double PERIOD_REBOOT_ANEMOMETER_MS = 1000.0 * 60 * 10; // 10分
 // アドバタイジングパケットを送信する秒数
 constexpr size_t PERIOD_AD = 10;
 // BLE送信を行う間隔の秒数
