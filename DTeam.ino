@@ -22,6 +22,12 @@ private:
   BLE m_ble;
   Measurements m_measurements;
   unsigned long m_preSendTimeMiliSec = 0;
+  enum class State {
+    Idle,
+    Advertising
+  };
+  State m_state = State::Idle;
+  unsigned long m_stateStartTime = 0;
 };
 
 void DTeam::Setup() {
@@ -40,13 +46,26 @@ void DTeam::Setup() {
 
 void DTeam::Loop() {
   Update();
-  const size_t periodSend = CalcDiffWithOverflow(m_preSendTimeMiliSec, millis());
-  if (periodSend >= (PERIOD_SEND - PERIOD_AD) * 1000) {
-    m_ble.Send(m_measurements, [&]{
-      Update();
-    });
-    m_preSendTimeMiliSec = millis();
-    m_anemometer.Reboot();
+  switch (m_state) {
+    case State::Idle: {
+      const size_t periodSend = CalcDiffWithOverflow(m_preSendTimeMiliSec, millis());
+      if (periodSend >= (PERIOD_SEND - PERIOD_AD) * 1000) {
+        m_ble.StartAdvertising(m_measurements);
+        m_state = State::Advertising;
+        m_stateStartTime = millis();
+      }
+      break;
+    }
+    case State::Advertising: {
+      const size_t periodAd = CalcDiffWithOverflow(m_stateStartTime, millis());
+      if (periodAd >= PERIOD_AD * 1000) {
+        m_ble.StopAdvertising();
+        m_state = State::Idle;
+        m_preSendTimeMiliSec = millis();
+        m_anemometer.Reboot();
+      }
+      break;
+    }
   }
 }
 

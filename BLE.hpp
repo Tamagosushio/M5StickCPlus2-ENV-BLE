@@ -10,7 +10,8 @@
 class BLE {
 public:
   void Setup();
-  void Send(const Measurements& measurements, std::function<void()> onWaitAction = nullptr);
+  void StartAdvertising(const Measurements& measurements);
+  void StopAdvertising();
 private:
   // アドバタイズデータをセット
   void SetAdvData(BLEAdvertising *pAdvertising, const Measurements& measurements);
@@ -27,19 +28,16 @@ void BLE::Setup() {
   m_pServer = BLEDevice::createServer();  // サーバーを生成
 }
 
-void BLE::Send(const Measurements& measurements, std::function<void()> onWaitAction) {
+void BLE::StartAdvertising(const Measurements& measurements) {
   if (!m_pServer) return;
   BLEAdvertising *pAdvertising = m_pServer->getAdvertising(); // アドバタイズオブジェクトを取得
   SetAdvData(pAdvertising, measurements); // アドバタイジングデーターをセット
   pAdvertising->start(); // アドバタイズ起動
-  // T_PERIOD秒アドバタイズする
-  const unsigned long startTime = millis();
-  while (millis() - startTime < PERIOD_AD * 1000) {
-    if (onWaitAction) {
-      onWaitAction();
-    }
-    delay(10);
-  }
+}
+
+void BLE::StopAdvertising() {
+  if (!m_pServer) return;
+  BLEAdvertising *pAdvertising = m_pServer->getAdvertising();
   pAdvertising->stop(); // アドバタイズ停止
 }
 
