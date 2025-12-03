@@ -29,7 +29,11 @@ void DTeam::Setup() {
   Serial.begin(9600);
   SetupPins();
   SetupDisplay();
-  m_envSensor.Setup();
+  while (!m_envSensor.Setup()) {
+    M5.Lcd.setCursor(0, 0);
+    M5.Lcd.println("EnvSensor Setup Failed");
+    delay(2000);
+  }
   m_anemometer.Setup();
   m_ble.Setup();
 }

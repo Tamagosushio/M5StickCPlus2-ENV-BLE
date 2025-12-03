@@ -7,7 +7,7 @@
 
 class EnvSensor {
 public:
-  void Setup();
+  bool Setup();
   void Update();
   Measurements GetMeasurements() const;
 private:
@@ -17,18 +17,14 @@ private:
   float m_humidity;
 };
 
-void EnvSensor::Setup() {
+bool EnvSensor::Setup() {
   if (!m_scd4x.begin(&Wire, SCD4X_I2C_ADDR, 32, 33, 400000U)) {
       Serial.println("Couldn't find SCD4X");
-      while (1) delay(1);
+      return false;
   }
-  uint16_t error;
-  if (error = m_scd4x.stopPeriodicMeasurement()) {
-      Serial.print("Error trying to execute stopPeriodicMeasurement(): ");
-  }
-  if (error = m_scd4x.startPeriodicMeasurement()) {
-      Serial.print("Error trying to execute startPeriodicMeasurement(): ");
-  }
+  m_scd4x.stopPeriodicMeasurement();
+  m_scd4x.startPeriodicMeasurement();
+  return true;
 }
 
 void EnvSensor::Update() {
