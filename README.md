@@ -1,5 +1,5 @@
 # M5StickCPlus2-ENV-BLE
-![M5StickCPlus2のLCDに測定値を表示](m5stickcplus2.png)
+![M5StickCPlus2のLCDに測定値を表示](m5stickcplus2.jpg)
 ![PythonプログラムによってBLEを受信](receive.png)
 
 ## OverView
