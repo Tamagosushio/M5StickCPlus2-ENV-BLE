@@ -16,6 +16,8 @@ classDiagram
     - BLE m_ble
     - Measurements m_measurements
     - unsigned long m_preSendTimeMiliSec
+    - State m_state
+    - unsigned long m_stateStartTime
     + Setup() void
     + Loop() void
     - Update() void
@@ -40,7 +42,8 @@ classDiagram
     - uint8_t m_seq
     - BLEServer* m_pServer
     + Setup() void
-    + Send(Measurements, function) void
+    + StartAdvertising(Measurements) void
+    + StopAdvertising() void
     - SetAdvData(BLEAdvertising*, Measurements) void
   }
 
@@ -49,7 +52,7 @@ classDiagram
     - uint16_t m_co2
     - float m_temperature
     - float m_humidity
-    + Setup() void
+    + Setup() bool
     + Update() void
     + GetMeasurements() Measurements
   }
@@ -96,26 +99,33 @@ sequenceDiagram
     DTeam->>DTeam: DisplayMeasurements()
     deactivate DTeam
 
-    opt Period Send Reached
-      DTeam->>BLE: Send(Measurements, callback)
-      activate BLE
-      loop During Advertising (10s)
-        BLE->>DTeam: callback() (Update)
-        activate DTeam
-        DTeam->>EnvSensor: Update()
-        DTeam->>EnvSensor: GetMeasurements()
-        EnvSensor-->>DTeam: Measurements
-        DTeam->>Anemometer: Update()
-        DTeam->>Anemometer: GetWindSpeed()
-        Anemometer-->>DTeam: double
-        DTeam->>DTeam: DisplayMeasurements()
-        deactivate DTeam
+    alt State: Idle
+      opt Period Send Reached
+        DTeam->>BLE: StartAdvertising(Measurements)
+        DTeam->>DTeam: State = Advertising
       end
-      deactivate BLE
-      DTeam->>Anemometer: Reboot()
+    else State: Advertising
+      opt Period Ad Reached
+        DTeam->>BLE: StopAdvertising()
+        DTeam->>DTeam: State = Idle
+        DTeam->>Anemometer: Reboot()
+      end
     end
     deactivate DTeam
   end
+```
+
+## State Diagram (DTeam)
+```mermaid
+stateDiagram-v2
+  [*] --> Idle: Setup
+
+  state "Idle" as Idle
+  state "Advertising" as Advertising
+
+  Idle --> Advertising: Period Send Reached / StartAdvertising()
+
+  Advertising --> Idle: Period Ad Reached / StopAdvertising(), Anemometer.Reboot()
 ```
 
 ## Hardware Wiring Diagram
