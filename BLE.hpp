@@ -46,12 +46,12 @@ void BLE::Send(const Measurements& measurements, std::function<void()> onWaitAct
 
 void BLE::SetAdvData(BLEAdvertising *pAdvertising, const Measurements& measurements) {
   BLEAdvertisementData oAdvertisementData = BLEAdvertisementData();
-  oAdvertisementData.setFlags(0x06); // BR_EDR_NOT_SUPPORTED | General Discoverable Mode
+  oAdvertisementData.setFlags(BLE_AD_FLAG);
   String strServiceData = "";
-  strServiceData += static_cast<char>(0x0c); // 長さ（12Byte）
-  strServiceData += static_cast<char>(0xff); // AD Type 0xFF: Manufacturer specific data
-  strServiceData += static_cast<char>(0xff); // Test manufacture ID low byte
-  strServiceData += static_cast<char>(0xff); // Test manufacture ID high byte
+  strServiceData += static_cast<char>(BLE_AD_LENGTH);
+  strServiceData += static_cast<char>(BLE_AD_TYPE_MANUFACTURER);
+  strServiceData += static_cast<char>(BLE_MANUFACTURER_ID_LOW);
+  strServiceData += static_cast<char>(BLE_MANUFACTURER_ID_HIGH);
   strServiceData += static_cast<char>(m_seq++); // シーケンス番号
   // 風速(int16_tの範囲内に収める)
   double windSpeed = std::clamp(measurements.windSpeed, 0.0, WIND_SPEED_MAX);

@@ -25,6 +25,13 @@ constexpr size_t PERIOD_AD = 10;
 // BLE送信を行う間隔の秒数
 constexpr size_t PERIOD_SEND = 30;
 
+// BLE定数
+constexpr uint8_t BLE_AD_FLAG = 0x06; // BR_EDR非対応 | 一般検出可能モード
+constexpr uint8_t BLE_AD_TYPE_MANUFACTURER = 0xff; // AD Type 0xFF: Manufacturer specific data
+constexpr uint8_t BLE_MANUFACTURER_ID_LOW = 0xff; // Test manufacture ID low byte
+constexpr uint8_t BLE_MANUFACTURER_ID_HIGH = 0xff; // Test manufacture ID high byte
+constexpr uint8_t BLE_AD_LENGTH = 0x0c;  // 長さ（12Byte）
+
 // センサーの測定値
 struct Measurements {
   double windSpeed = 0.0;
