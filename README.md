@@ -4,6 +4,7 @@
 
 ## OverView
 M5StickCPlus2で環境センサと風速計の測定値を取得し、BLEで送信を行います。  
+UML図は[UML.md](UML.md)を参照してください。
 
 ## Requirements
 - M5StickPlus2
