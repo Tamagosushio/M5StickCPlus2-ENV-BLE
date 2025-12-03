@@ -72,13 +72,13 @@ void DTeam::SetupDisplay() {
 void DTeam::DisplayMeasurements(void) {
   M5.Lcd.setCursor(0, 0, 1);
   M5.Lcd.printf("windSpeed:\r\n");
-  M5.Lcd.printf("    %2.2f[m/s]\r\n", m_measurements.windSpeed);
+  M5.Lcd.printf("    %2.2f[m/s]  \r\n", m_measurements.windSpeed);
   M5.Lcd.printf("CO2:\r\n");
-  M5.Lcd.printf("    %4d[ppm]\r\n", m_measurements.co2);
+  M5.Lcd.printf("    %4d[ppm]    \r\n", m_measurements.co2);
   M5.Lcd.printf("Temperature:\r\n");
-  M5.Lcd.printf("    %2.2f[C]\r\n", m_measurements.temperature);
+  M5.Lcd.printf("    %2.2f[C]    \r\n", m_measurements.temperature);
   M5.Lcd.printf("Humidity:\r\n");
-  M5.Lcd.printf("    %2.2f[%%]\r\n", m_measurements.humidity);
+  M5.Lcd.printf("    %2.2f[%%]   \r\n", m_measurements.humidity);
 }
 
 
