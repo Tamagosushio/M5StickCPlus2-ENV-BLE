@@ -81,7 +81,10 @@ void Anemometer::Update(void) {
     noInterrupts();
     double period = g_latestPeriodMiliSec;
     interrupts();
-    m_windSpeed = CalcWindSpeed(period);
+    const double newWindSpeed = CalcWindSpeed(period);
+    if (std::clamp(newWindSpeed, WIND_SPEED_MIN, WIND_SPEED_MAX) == newWindSpeed) {
+      m_windSpeed = newWindSpeed;
+    }
   }
 }
 

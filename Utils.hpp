@@ -16,14 +16,22 @@ constexpr unsigned long UNSIGNED_LONG_LIMIT = std::numeric_limits<unsigned long>
 constexpr double PERIOD_TIMEOUT_MS = 1000.0;
 // 周期がタイムアウトしたときの風速
 constexpr double WIND_SPEED_TIMEOUT = 0.0;
-// 風速値の最大値
-constexpr double WIND_SPEED_MAX = 30.0;
 // 風速計を再起動する間隔
 constexpr double PERIOD_REBOOT_ANEMOMETER_MS = 1000.0 * 60 * 10; // 10分
 // アドバタイジングパケットを送信する秒数
-constexpr size_t PERIOD_AD = 10;
+constexpr size_t PERIOD_AD = 3;
 // BLE送信を行う間隔の秒数
-constexpr size_t PERIOD_SEND = 30;
+constexpr size_t PERIOD_SEND = 5;
+
+// センサー計測範囲
+constexpr uint16_t CO2_MIN = 400;
+constexpr uint16_t CO2_MAX = 2000;
+constexpr float TEMP_MIN = -10.0;
+constexpr float TEMP_MAX = 60.0;
+constexpr float HUMIDITY_MIN = 0.0;
+constexpr float HUMIDITY_MAX = 95.0;
+constexpr double WIND_SPEED_MIN = 0.0;
+constexpr double WIND_SPEED_MAX = 30.0;
 
 // BLE定数
 constexpr uint8_t BLE_AD_FLAG = 0x06; // BR_EDR非対応 | 一般検出可能モード

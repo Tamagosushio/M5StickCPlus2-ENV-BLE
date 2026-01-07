@@ -51,16 +51,15 @@ void BLE::SetAdvData(BLEAdvertising *pAdvertising, const Measurements& measureme
   strServiceData += static_cast<char>(BLE_MANUFACTURER_ID_LOW);
   strServiceData += static_cast<char>(BLE_MANUFACTURER_ID_HIGH);
   strServiceData += static_cast<char>(m_seq++); // シーケンス番号
-  // 風速(int16_tの範囲内に収める)
-  double windSpeed = std::clamp(measurements.windSpeed, 0.0, WIND_SPEED_MAX);
-  const uint16_t windSpeedInt = static_cast<uint16_t>(windSpeed * 100.0);
+  // 風速(uint16_tの範囲内に収める)
+  const uint16_t windSpeedInt = static_cast<uint16_t>(measurements.windSpeed * 100.0);
   strServiceData += static_cast<char>(windSpeedInt & 0xff);
   strServiceData += static_cast<char>((windSpeedInt >> 8) & 0xff);
   // CO2濃度
   strServiceData += static_cast<char>(measurements.co2 & 0xff);
   strServiceData += static_cast<char>((measurements.co2 >> 8) & 0xff);
   // 温度
-  const uint16_t temperatureInt = static_cast<uint16_t>(measurements.temperature * 100.0);
+  const int16_t temperatureInt = static_cast<int16_t>(measurements.temperature * 100.0);
   strServiceData += static_cast<char>(temperatureInt & 0xff);
   strServiceData += static_cast<char>((temperatureInt >> 8) & 0xff);
   // 湿度

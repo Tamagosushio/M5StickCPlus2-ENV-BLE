@@ -29,9 +29,18 @@ bool EnvSensor::Setup() {
 
 void EnvSensor::Update() {
   if (m_scd4x.update()) {
-    m_co2 = m_scd4x.getCO2();
-    m_temperature = m_scd4x.getTemperature();
-    m_humidity = m_scd4x.getHumidity();
+    const uint16_t co2 = m_scd4x.getCO2();
+    if (std::clamp(co2, CO2_MIN, CO2_MAX) == co2) {
+      m_co2 = co2;
+    }
+    const float temperature = m_scd4x.getTemperature();
+    if (std::clamp(temperature, TEMP_MIN, TEMP_MAX) == temperature) {
+      m_temperature = temperature;
+    }
+    const float humidity = m_scd4x.getHumidity();
+    if (std::clamp(humidity, HUMIDITY_MIN, HUMIDITY_MAX) == humidity) {
+      m_humidity = humidity;
+    }
   }
 }
 
